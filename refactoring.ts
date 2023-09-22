@@ -35,9 +35,13 @@ const isPrime = (n: number): boolean => {
 
 const reportPrimes = (n: number) => {
   for (let i = 2; i < n; i++) {
-    if (isPrime(i)) {
-      console.log(`${i} is prime`);
-    }
+    reportIfPrime(i);
+  }
+}
+
+const reportIfPrime = (n: number) => {
+  if (isPrime(n)) {
+    console.log(`${n} is prime`);
   }
 }
 
