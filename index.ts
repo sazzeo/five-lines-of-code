@@ -1,4 +1,3 @@
-
 const TILE_SIZE = 30;
 const FPS = 30;
 const SLEEP = 1000 / FPS;
@@ -53,7 +52,7 @@ function moveHorizontal(dx: number) {
     || map[playery][playerx + dx] === Tile.AIR) {
     moveToTile(playerx + dx, playery);
   } else if ((map[playery][playerx + dx] === Tile.STONE
-    || map[playery][playerx + dx] === Tile.BOX)
+      || map[playery][playerx + dx] === Tile.BOX)
     && map[playery][playerx + dx + dx] === Tile.AIR
     && map[playery + 1][playerx + dx] !== Tile.AIR) {
     map[playery][playerx + dx + dx] = map[playery][playerx + dx];
@@ -113,17 +112,21 @@ function update() {
 }
 
 function draw() {
-  let canvas = document.getElementById("GameCanvas") as HTMLCanvasElement;
-  let g = canvas.getContext("2d");
-
-  g.clearRect(0, 0, canvas.width, canvas.height);
+  const g = createGraphics();
 
   drawMap(g);
   drawPlayer(g);
 
 }
 
-const drawMap = (g : CanvasRenderingContext2D)=>{
+const createGraphics = () => {
+  let canvas = document.getElementById("GameCanvas") as HTMLCanvasElement;
+  let g = canvas.getContext("2d");
+  g.clearRect(0, 0, canvas.width, canvas.height);
+  return g;
+}
+
+const drawMap = (g: CanvasRenderingContext2D) => {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
       if (map[y][x] === Tile.FLUX)
@@ -145,7 +148,7 @@ const drawMap = (g : CanvasRenderingContext2D)=>{
   }
 }
 
-const drawPlayer =(g : CanvasRenderingContext2D)=>{
+const drawPlayer = (g: CanvasRenderingContext2D) => {
   g.fillStyle = "#ff0000";
   g.fillRect(playerx * TILE_SIZE, playery * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 }
