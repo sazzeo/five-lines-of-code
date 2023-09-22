@@ -26,3 +26,9 @@ If you have feedback or comments on this repo don't hesitate to write me a messa
 
 Thank you for checking it out.
 
+
+### tsc install
+```text
+ npm install typescript -g   #타입스크립트 다운로드
+ tsx -w                      #타입스크립트 save 시 자동 컴파일
+```
