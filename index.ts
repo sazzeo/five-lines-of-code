@@ -13,21 +13,20 @@ enum Tile {
     KEY2, LOCK2
 }
 
-//3. 열거형 이름 변경
 enum RawInput {
     UP, DOWN, LEFT, RIGHT
 }
 
-//1. enum을 인터페이스로 대체한다.
 interface Input {
+    handle: () => void;
     isRight: () => boolean;
     isLeft: () => boolean;
     isUp: () => boolean;
     isDown: () => boolean;
 }
 
-//2. 해당하는 클래스들을 만든다. 자신의 값 제외, 모든 메소드는 false 를 반환한다
 class Right implements Input {
+    handle = () => moveHorizontal(1)
     isRight = () => true;
     isLeft = () => false;
     isUp = () => false;
@@ -35,6 +34,7 @@ class Right implements Input {
 }
 
 class Left implements Input {
+    handle = () => moveHorizontal(-1)
     isRight = () => false;
     isLeft = () => true;
     isUp = () => false;
@@ -42,6 +42,7 @@ class Left implements Input {
 }
 
 class Up implements Input {
+    handle = () => moveVertical(-1)
     isRight = () => false;
     isLeft = () => false;
     isUp = () => true;
@@ -49,6 +50,7 @@ class Up implements Input {
 }
 
 class Down implements Input {
+    handle = () => moveVertical(1)
     isRight = () => false;
     isLeft = () => false;
     isUp = () => false;
@@ -131,17 +133,9 @@ const handleInputs = () => {
 }
 
 
-//4. 컴파일 에러 수정
-//5. 열거형을 클래스 인스턴스로 대체한다
+
 function handleInput(input: Input) {
-    if (input.isLeft())
-        moveHorizontal(-1);
-    else if (input.isRight())
-        moveHorizontal(1);
-    else if (input.isUp())
-        moveVertical(-1);
-    else if (input.isDown())
-        moveVertical(1);
+    input.handle();
 }
 
 const updateMap = () => {
@@ -228,8 +222,7 @@ const UP_KEY = "ArrowUp";
 const RIGHT_KEY = "ArrowRight";
 const DOWN_KEY = "ArrowDown";
 
-//4. 컴파일 에러 수정
-//5. 열거형을 클래스 인스턴스로 대체한다
+
 window.addEventListener("keydown", e => {
     if (e.key === LEFT_KEY || e.key === "a") inputs.push(new Left());
     else if (e.key === UP_KEY || e.key === "w") inputs.push(new Up());
