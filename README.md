@@ -30,5 +30,5 @@ Thank you for checking it out.
 ### tsc install
 ```text
  npm install typescript -g   #타입스크립트 다운로드
- tsx -w                      #타입스크립트 save 시 자동 컴파일
+ tsc -w                      #타입스크립트 save 시 자동 컴파일
 ```
