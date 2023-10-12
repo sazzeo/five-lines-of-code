@@ -13,39 +13,42 @@ enum Tile {
     KEY2, LOCK2
 }
 
-enum Input {
+//3. 열거형 이름 변경
+enum RawInput {
     UP, DOWN, LEFT, RIGHT
 }
 
-interface Input2 {
+//1. enum을 인터페이스로 대체한다.
+interface Input {
     isRight: () => boolean;
     isLeft: () => boolean;
     isUp: () => boolean;
     isDown: () => boolean;
 }
 
-class Right implements Input2 {
+//2. 해당하는 클래스들을 만든다. 자신의 값 제외, 모든 메소드는 false 를 반환한다
+class Right implements Input {
     isRight = () => true;
     isLeft = () => false;
     isUp = () => false;
     isDown = () => false;
 }
 
-class Left implements Input2 {
+class Left implements Input {
     isRight = () => false;
     isLeft = () => true;
     isUp = () => false;
     isDown = () => false;
 }
 
-class Up implements Input2 {
+class Up implements Input {
     isRight = () => false;
     isLeft = () => false;
     isUp = () => true;
     isDown = () => false;
 }
 
-class Down implements Input2 {
+class Down implements Input {
     isRight = () => false;
     isLeft = () => false;
     isUp = () => false;
@@ -127,14 +130,17 @@ const handleInputs = () => {
     }
 }
 
+
+//4. 컴파일 에러 수정
+//5. 열거형을 클래스 인스턴스로 대체한다
 function handleInput(input: Input) {
-    if (input === Input.LEFT)
+    if (input.isLeft())
         moveHorizontal(-1);
-    else if (input === Input.RIGHT)
+    else if (input.isRight())
         moveHorizontal(1);
-    else if (input === Input.UP)
+    else if (input.isUp())
         moveVertical(-1);
-    else if (input === Input.DOWN)
+    else if (input.isDown())
         moveVertical(1);
 }
 
@@ -221,10 +227,13 @@ const LEFT_KEY = "ArrowLeft";
 const UP_KEY = "ArrowUp";
 const RIGHT_KEY = "ArrowRight";
 const DOWN_KEY = "ArrowDown";
+
+//4. 컴파일 에러 수정
+//5. 열거형을 클래스 인스턴스로 대체한다
 window.addEventListener("keydown", e => {
-    if (e.key === LEFT_KEY || e.key === "a") inputs.push(Input.LEFT);
-    else if (e.key === UP_KEY || e.key === "w") inputs.push(Input.UP);
-    else if (e.key === RIGHT_KEY || e.key === "d") inputs.push(Input.RIGHT);
-    else if (e.key === DOWN_KEY || e.key === "s") inputs.push(Input.DOWN);
+    if (e.key === LEFT_KEY || e.key === "a") inputs.push(new Left());
+    else if (e.key === UP_KEY || e.key === "w") inputs.push(new Up());
+    else if (e.key === RIGHT_KEY || e.key === "d") inputs.push(new Right());
+    else if (e.key === DOWN_KEY || e.key === "s") inputs.push(new Down());
 });
 
