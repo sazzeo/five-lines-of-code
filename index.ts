@@ -256,6 +256,7 @@ class Down implements Input {
 
 let playerx = 1;
 let playery = 1;
+
 let map: Tile[][] = [
     [2, 2, 2, 2, 2, 2, 2, 2],
     [2, 3, 0, 1, 1, 2, 0, 2],
@@ -267,10 +268,22 @@ let map: Tile[][] = [
 
 let inputs: Input[] = [];
 
-function remove2(tile: Tile) {
+
+//remove 함수 전문화
+function removeLock1() {
     for (let y = 0; y < map.length; y++) {
         for (let x = 0; x < map[y].length; x++) {
-            if (map[y][x] === tile) {
+            if (map[y][x].isLock1()) {
+                map[y][x] = new Air();
+            }
+        }
+    }
+}
+
+function removeLock2() {
+    for (let y = 0; y < map.length; y++) {
+        for (let x = 0; x < map[y].length; x++) {
+            if (map[y][x].isLock2()) {
                 map[y][x] = new Air();
             }
         }
@@ -295,10 +308,10 @@ function moveHorizontal(dx: number) {
         map[playery][playerx + dx + dx] = map[playery][playerx + dx];
         moveToTile(playerx + dx, playery);
     } else if (map[playery][playerx + dx].isKey1()) {
-        remove(Tile.LOCK1);
+        removeLock1();
         moveToTile(playerx + dx, playery);
     } else if (map[playery][playerx + dx].isKey2()) {
-        remove(Tile.LOCK2);
+        removeLock2();
         moveToTile(playerx + dx, playery);
     }
 }
@@ -308,10 +321,10 @@ function moveVertical(dy: number) {
         || map[playery + dy][playerx].isAir()) {
         moveToTile(playerx, playery + dy);
     } else if (map[playery + dy][playerx].isKey1()) {
-        remove(Tile.LOCK1);
+        removeLock1();
         moveToTile(playerx, playery + dy);
     } else if (map[playery + dy][playerx].isKey2()) {
-        remove(Tile.LOCK2);
+        removeLock2();
         moveToTile(playerx, playery + dy);
     }
 }
