@@ -26,6 +26,8 @@ interface Tile {
     isKey2: () => boolean;
     isLock1: () => boolean;
     isLock2: () => boolean;
+
+    color: (g: CanvasRenderingContext2D) => void;
 }
 
 class Air implements Tile {
@@ -41,6 +43,9 @@ class Air implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+
+    color = (g: CanvasRenderingContext2D) => {
+    };
 }
 
 class Flux implements Tile {
@@ -56,6 +61,9 @@ class Flux implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#ccffcc"
+    };
 }
 
 class Unbreakable implements Tile {
@@ -71,6 +79,9 @@ class Unbreakable implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#999999"
+    };
 }
 
 class Player implements Tile {
@@ -86,6 +97,8 @@ class Player implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+    };
 }
 
 
@@ -102,6 +115,9 @@ class Stone implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#0000cc"
+    };
 }
 
 class FallingStone implements Tile {
@@ -117,6 +133,9 @@ class FallingStone implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#0000cc"
+    };
 }
 
 class Box implements Tile {
@@ -132,6 +151,9 @@ class Box implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#8b4513"
+    };
 }
 
 class FallingBox implements Tile {
@@ -147,6 +169,9 @@ class FallingBox implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#8b4513"
+    };
 }
 
 class Key1 implements Tile {
@@ -162,6 +187,9 @@ class Key1 implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#ffcc00"
+    };
 }
 
 
@@ -178,6 +206,9 @@ class Key2 implements Tile {
     isKey2 = () => true;
     isLock1 = () => false;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#ffcc00"
+    };
 }
 
 class Lock1 implements Tile {
@@ -193,6 +224,9 @@ class Lock1 implements Tile {
     isKey2 = () => false;
     isLock1 = () => true;
     isLock2 = () => false;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#00ccff"
+    };
 }
 
 class Lock2 implements Tile {
@@ -208,6 +242,9 @@ class Lock2 implements Tile {
     isKey2 = () => false;
     isLock1 = () => false;
     isLock2 = () => true;
+    color = (g: CanvasRenderingContext2D) => {
+        g.fillStyle = "#00ccff"
+    };
 }
 
 enum RawInput {
@@ -274,27 +311,40 @@ const assertExhausted = (x: never): never => {
 
 const transformTile = (tile: RawTile) => {
     switch (tile) {
-        case RawTile.AIR: return new Air();
-        case RawTile.FLUX: return new Flux();
-        case RawTile.UNBREAKABLE: return new Unbreakable();
-        case RawTile.PLAYER: return new Player();
-        case RawTile.STONE: return new Stone();
-        case RawTile.FALLING_STONE: return new FallingStone();
-        case RawTile.BOX: return new Box();
-        case RawTile.FALLING_BOX: return new FallingBox();
-        case RawTile.KEY1: return new Key1();
-        case RawTile.KEY2: return new Key2();
-        case RawTile.LOCK1: return new Lock1();
-        case RawTile.LOCK2: return new Lock2();
-        default: assertExhausted(tile);
+        case RawTile.AIR:
+            return new Air();
+        case RawTile.FLUX:
+            return new Flux();
+        case RawTile.UNBREAKABLE:
+            return new Unbreakable();
+        case RawTile.PLAYER:
+            return new Player();
+        case RawTile.STONE:
+            return new Stone();
+        case RawTile.FALLING_STONE:
+            return new FallingStone();
+        case RawTile.BOX:
+            return new Box();
+        case RawTile.FALLING_BOX:
+            return new FallingBox();
+        case RawTile.KEY1:
+            return new Key1();
+        case RawTile.KEY2:
+            return new Key2();
+        case RawTile.LOCK1:
+            return new Lock1();
+        case RawTile.LOCK2:
+            return new Lock2();
+        default:
+            assertExhausted(tile);
     }
 }
 
-const transformMap = ()=> {
+const transformMap = () => {
     map = new Array(rawMap.length);
-    for(let y=0; y< rawMap.length; y++) {
+    for (let y = 0; y < rawMap.length; y++) {
         map[y] = new Array(rawMap[y].length);
-        for(let x = 0 ; x < rawMap[y].length; x++) {
+        for (let x = 0; x < rawMap[y].length; x++) {
             map[y][x] = transformTile(rawMap[y][x]);
         }
     }
@@ -424,29 +474,16 @@ const createGraphics = () => {
 const drawMap = (g: CanvasRenderingContext2D) => {
     for (let y = 0; y < map.length; y++) {
         for (let x = 0; x < map[y].length; x++) {
-            colorOfTile(y, x, g);
-
+            map[y][x].color(g);
             if (!map[y][x].isAir() && !map[y][x].isPlayer())
                 g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         }
     }
 }
 
-//추출된 메소드
-//if문에서 else를 사용하지 말것 규칙 위반
+//클래스로 코드 이관으로 else if 문제 해결
 function colorOfTile(y: number, x: number, g: CanvasRenderingContext2D) {
-    if (map[y][x].isFlux())
-        g.fillStyle = "#ccffcc";
-    else if (map[y][x].isUnbreakable())
-        g.fillStyle = "#999999";
-    else if (map[y][x].isStone() || map[y][x].isFallingStone())
-        g.fillStyle = "#0000cc";
-    else if (map[y][x].isBox() || map[y][x].isFallingBox())
-        g.fillStyle = "#8b4513";
-    else if (map[y][x].isKey1() || map[y][x].isLock1())
-        g.fillStyle = "#ffcc00";
-    else if (map[y][x].isKey2() || map[y][x].isLock2())
-        g.fillStyle = "#00ccff";
+    map[y][x].color(g);
 }
 
 const drawPlayer = (g: CanvasRenderingContext2D) => {
