@@ -176,26 +176,34 @@ const createGraphics = () => {
     return g;
 }
 
+
+//메소드 추출 -> 5줄 규칙 만족
 const drawMap = (g: CanvasRenderingContext2D) => {
     for (let y = 0; y < map.length; y++) {
         for (let x = 0; x < map[y].length; x++) {
-            if (map[y][x] === Tile.FLUX)
-                g.fillStyle = "#ccffcc";
-            else if (map[y][x] === Tile.UNBREAKABLE)
-                g.fillStyle = "#999999";
-            else if (map[y][x] === Tile.STONE || map[y][x] === Tile.FALLING_STONE)
-                g.fillStyle = "#0000cc";
-            else if (map[y][x] === Tile.BOX || map[y][x] === Tile.FALLING_BOX)
-                g.fillStyle = "#8b4513";
-            else if (map[y][x] === Tile.KEY1 || map[y][x] === Tile.LOCK1)
-                g.fillStyle = "#ffcc00";
-            else if (map[y][x] === Tile.KEY2 || map[y][x] === Tile.LOCK2)
-                g.fillStyle = "#00ccff";
+            colorOfTile(y, x, g);
 
             if (map[y][x] !== Tile.AIR && map[y][x] !== Tile.PLAYER)
                 g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         }
     }
+}
+
+//추출된 메소드
+//if문에서 else를 사용하지 말것 규칙 위반
+function colorOfTile(y: number, x: number, g: CanvasRenderingContext2D) {
+    if (map[y][x] === Tile.FLUX)
+        g.fillStyle = "#ccffcc";
+    else if (map[y][x] === Tile.UNBREAKABLE)
+        g.fillStyle = "#999999";
+    else if (map[y][x] === Tile.STONE || map[y][x] === Tile.FALLING_STONE)
+        g.fillStyle = "#0000cc";
+    else if (map[y][x] === Tile.BOX || map[y][x] === Tile.FALLING_BOX)
+        g.fillStyle = "#8b4513";
+    else if (map[y][x] === Tile.KEY1 || map[y][x] === Tile.LOCK1)
+        g.fillStyle = "#ffcc00";
+    else if (map[y][x] === Tile.KEY2 || map[y][x] === Tile.LOCK2)
+        g.fillStyle = "#00ccff";
 }
 
 const drawPlayer = (g: CanvasRenderingContext2D) => {
